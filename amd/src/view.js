@@ -1423,27 +1423,6 @@ const registerEventListeners = (root, page) => {
         }
     });
 
-    document.body.addEventListener('click', (e) => {
-        const expandLink = e.target;
-        if (expandLink.classList.contains('eledia-expandsummary')) {
-            e.preventDefault();
-            const summary = e.target.previousElementSibling;
-            expandLink.classList.add('d-none');
-            summary.classList.remove('summary-fadeout');
-        }
-    });
-
-    document.body.addEventListener('click', (e) => {
-        const collapseLink = e.target;
-        if (collapseLink.classList.contains('eledia-collapsesummary')) {
-            e.preventDefault();
-            const summary = e.target.parentElement;
-            const expandLink = summary.nextElementSibling;
-            expandLink.classList.remove('d-none');
-            summary.classList.add('summary-fadeout');
-        }
-    });
-
     groupingFilter.forEach(filter => {
         const filterType = filter.dataset.value;
         filter.addEventListener('click', () => {
