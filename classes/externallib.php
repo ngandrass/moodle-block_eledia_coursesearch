@@ -1007,8 +1007,11 @@ class externallib extends external_api {
     public static function map_customfield_info($customfield) {
         $configdata = json_decode($customfield->configdata);
         if ((int) $configdata->visibility === 2) {
-            return (object) ['id' => $customfield->id, 'name' => self::select_translation($customfield->name),
-                'description' => $customfield->description];
+            return (object) [
+                'id' => $customfield->id,
+                'name' => format_text($customfield->name, FORMAT_HTML),
+                'description' => $customfield->description,
+            ];
         }
         return null;
     }
@@ -1025,18 +1028,6 @@ class externallib extends external_api {
         }
         require_login();
         return self::get_customfield_fields(true);
-    }
-
-    /**
-     * Select translation
-     *
-     * @param string $text Text to translate
-     * @return string
-     */
-    public static function select_translation(string $text): string {
-        $idx = explode('_', current_language())[0] === 'de' ? 0 : 1;
-        $translations = explode(';', $text);
-        return (isset($translations[$idx]) ? $translations[$idx] : $translations[0]);
     }
 
     // INFO: Search filtering is handled in frontend.
