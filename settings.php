@@ -119,6 +119,9 @@ if ($ADMIN->fulltree) {
 
     $choices = \core_customfield\api::get_fields_supporting_course_grouping();
     if ($choices) {
+        // Apply translation filters to custom field titles.
+        $choices = array_map(fn ($title) => format_text($title, FORMAT_HTML), $choices);
+
         $choices  = ['' => get_string('choosedots')] + $choices;
         $settings->add(new admin_setting_configselect(
             'block_eledia_coursesearch/customfiltergrouping',
