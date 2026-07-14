@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased] - YYYY-MM-DD
 
 - Replace custom translation system with Moodle's built-in multilang filter
+- Add Bootstrap 5 compatibility for newer Moodle releases
 
 
 ## [1.0] - 2026-01-29
