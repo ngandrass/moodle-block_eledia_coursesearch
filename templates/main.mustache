@@ -35,13 +35,21 @@
             {{> block_eledia_coursesearch/nav-grouping-selector }}
             {{> block_eledia_coursesearch/nav-customfield-selector }}
 
-			{{#options_top}}
+            {{! Expansion content }}
+            <div class="collapse customfields-collapse row g-2 mt-0 px-0 w-100" id="filtercollapse">
+                {{> block_eledia_coursesearch/nav-customfield-selector-collapse }}
+                {{> block_eledia_coursesearch/nav-category-selector }}
+                {{> block_eledia_coursesearch/nav-tags-selector }}
+                {{!> block_eledia_coursesearch/nav-sort-selector }}
+            </div>
+
+            {{#options_top}}
                 <div class="coursesearchitems row g-1 pe-3 ps-3 w-100">
                     {{> block_eledia_coursesearch/nav-selected-option-items }}
                 </div>
             {{/options_top}}
 
-            {{! Expansion start }}
+            {{! Expansion trigger }}
             <div class="search-extension col-12 mb-3 d-flex">
                 <a
                     class="btn btn-primary me-3"
@@ -57,19 +65,12 @@
                 </a>
                 {{> block_eledia_coursesearch/nav-display-selector }}
             </div>
-            <div class="collapse customfields-collapse row g-1 pe-3 ps-3 w-100" id="filtercollapse">
-                {{> block_eledia_coursesearch/nav-customfield-selector-collapse }}
-                {{> block_eledia_coursesearch/nav-category-selector }}
-                {{> block_eledia_coursesearch/nav-tags-selector }}
-                {{!> block_eledia_coursesearch/nav-sort-selector }}
-            </div>
 
             {{#options_bottom}}
                 <div class="coursesearchitems row g-1 pe-3 ps-3 w-100">
                     {{> block_eledia_coursesearch/nav-selected-option-items }}
                 </div>
             {{/options_bottom}}
-            {{! Expansion end }}
         </div>
     </div>
 

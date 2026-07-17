@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased] - YYYY-MM-DD
 
 - Replaced text button for switching between card and list mode with bootstrap icon button group
+- Move collapsible custom field filters above the action buttons to group all filter options together
 - Replace custom translation system with Moodle's built-in multilang filter
 - Add Bootstrap 5 compatibility for newer Moodle releases
 
