@@ -11,6 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Move collapsible custom field filters above the action buttons to group all filter options together
 - Replace custom translation system with Moodle's built-in multilang filter
 - Align course search bar placeholder with the input field label
+- Improve course freetext search bar and remove dependency on core component
 - Add Bootstrap 5 compatibility for newer Moodle releases
 
 
