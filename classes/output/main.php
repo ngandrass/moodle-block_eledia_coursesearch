@@ -345,6 +345,13 @@ class main implements renderable, templatable {
         $layout->active = $this->view == $layoutname ? true : false;
         $layout->arialabel = get_string('aria:' . $layoutname, 'block_eledia_coursesearch');
 
+        $icons = [
+            BLOCK_ELEDIACOURSESEARCH_VIEW_CARD => 'fa-th-large',
+            BLOCK_ELEDIACOURSESEARCH_VIEW_LIST => 'fa-list',
+            BLOCK_ELEDIACOURSESEARCH_VIEW_SUMMARY => 'fa-align-left',
+        ];
+        $layout->icon = $icons[$layoutname] ?? 'fa-th-large';
+
         return $layout;
     }
 
