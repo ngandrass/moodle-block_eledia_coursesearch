@@ -50,6 +50,9 @@ require_once($CFG->dirroot . '/course/renderer.php');
  * @license https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class externallib extends external_api {
+    /** @var string Shortname of the custom field that controls visibility of courses inside the course search block */
+    const VISIBILITY_CUSTOMFIELD_SHORTNAME = 'block_eledia_coursesearch_visible';
+
     /**
      * Define input parameters
      *
@@ -658,6 +661,19 @@ class externallib extends external_api {
             $timestamp = time();
             $sql .= " AND (c.startdate < $timestamp AND (c.enddate > $timestamp OR c.enddate = 0 )) ";
         }
+
+        // Exclude all courses that have self::VISIBILITY_CUSTOMFIELD_SHORTNAME set to 0.
+        // All courses without the field set will be visible by default.
+        $allparams['visibility_cf_shortname'] = self::VISIBILITY_CUSTOMFIELD_SHORTNAME;
+        $allparams['visibility_cf_value'] = '1';
+        $sql .= " AND NOT EXISTS (
+            SELECT 1
+            FROM {customfield_data} cd
+            JOIN {customfield_field} cf ON cf.id = cd.fieldid
+            WHERE cf.shortname = :visibility_cf_shortname
+            AND cd.contextid = ctx.id
+            AND cd.value != :visibility_cf_value
+        ) ";
 
         $idsunfiltered = $DB->get_records_sql($sql, $allparams, $offset, $limit);
         $idsunfiltered = array_keys($idsunfiltered);

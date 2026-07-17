@@ -7,6 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased] - YYYY-MM-DD
 
+- Allow courses to be excluded from search results via a custom course field / checkbox (`block_eledia_coursesearch_visible`)
 - Replaced text button for switching between card and list mode with bootstrap icon button group
 - Move collapsible custom field filters above the action buttons to group all filter options together
 - Replace custom translation system with Moodle's built-in multilang filter
