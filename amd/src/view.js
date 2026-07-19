@@ -298,6 +298,72 @@ const getCustomFields = () => {
 };
 
 /**
+ * Updates the input field for a category selector based on the current selection.
+ */
+const updateCategoryInputDisplay = () => {
+    const page = document.querySelector(SELECTORS.region.selectBlock);
+    const container = page.querySelector(SELECTORS.cat.input);
+    if (!container || !container.dataset.optionsInline) {
+        return;
+    }
+    const items = selectedCategories.map((cat, idx) => (
+        {name: cat.name, type: 'category', index: idx, cindex: 0}
+    ));
+    Templates.renderForPromise('block_eledia_coursesearch/nav-input-pill-items', {
+        placeholder: container.dataset.placeholder,
+        items: items,
+        hasitems: items.length > 0
+    }).then(({html, js}) => {
+        Templates.replaceNodeContents(container, html, js);
+    }).catch(error => displayException(error));
+};
+
+/**
+ * Updates the input field for a tags selector based on the current selection.
+ */
+const updateTagsInputDisplay = () => {
+    const page = document.querySelector(SELECTORS.region.selectBlock);
+    const container = page.querySelector(SELECTORS.tags.input);
+    if (!container || !container.dataset.optionsInline) {
+        return;
+    }
+    const items = selectedTags.map((tag, idx) => (
+        {name: tag.name, type: 'tag', index: idx, cindex: 0}
+    ));
+    Templates.renderForPromise('block_eledia_coursesearch/nav-input-pill-items', {
+        placeholder: container.dataset.placeholder,
+        items: items,
+        hasitems: items.length > 0
+    }).then(({html, js}) => {
+        Templates.replaceNodeContents(container, html, js);
+    }).catch(error => displayException(error));
+};
+
+/**
+ * Updates the input field for a custom field selector based on the current selection.
+ *
+ * @param {Number} customfieldId ID of the custom field input element to re-render
+ */
+const updateCustomfieldInputDisplay = (customfieldId) => {
+    const page = document.querySelector(SELECTORS.region.selectBlock);
+    const container = page.querySelector(SELECTORS.customfields.searchfield + customfieldId);
+    if (!container || !container.dataset.optionsInline) {
+        return;
+    }
+    const selections = selectedCustomfields[customfieldId] || [];
+    const items = selections.map((item, idx) => (
+        {name: item.name, type: 'customfield', index: customfieldId, cindex: idx}
+    ));
+    Templates.renderForPromise('block_eledia_coursesearch/nav-input-pill-items', {
+        placeholder: container.dataset.placeholder,
+        items: items,
+        hasitems: items.length > 0
+    }).then(({html, js}) => {
+        Templates.replaceNodeContents(container, html, js);
+    }).catch(error => displayException(error));
+};
+
+/**
  * Get the container element for the favourite icon.
  *
  * @param {Object} root The course overview container
@@ -1271,14 +1337,17 @@ const registerEventListeners = (root, page) => {
     // renderCustomfields()
     customInputs.forEach(i => {
         i.addEventListener('click', (e) => {
-            currentCustomField = e.target.dataset.customfieldid;
-            const currentSearchterm = e.target.value.toLowerCase();
+            // Prevent dropdown opening when clearing a selection pill.
+            if (e.target.closest('.pill-input-cancelbtn')) {
+                return;
+            }
+            currentCustomField = i.dataset.customfieldid;
             initializeCustomfieldSearchContent(
                 SELECTORS.customfields.dropdownDiv + currentCustomField,
                 SELECTORS.customfields.dropdown + currentCustomField,
                 customfieldSearchFunctionality(),
                 page,
-                currentSearchterm);
+                '');
         });
         i.addEventListener('input', debounce((e) => {
             currentCustomField = e.target.dataset.customfieldid;
@@ -1310,7 +1379,11 @@ const registerEventListeners = (root, page) => {
     });
 
     // Initialize category search dropdown on first click.
-    catinput.addEventListener('click', () => {
+    catinput.addEventListener('click', (e) => {
+        // Prevent dropdown opening when clearing a selection pill.
+        if (e.target.closest('.pill-input-cancelbtn')) {
+            return;
+        }
         initializeCategorySearchContent(
             SELECTORS.cat.dropdownDiv,
             SELECTORS.cat.dropdown,
@@ -1342,7 +1415,11 @@ const registerEventListeners = (root, page) => {
     }, 1000));
 
     // Initialize tags search dropdown on first click.
-    tagsinput.addEventListener('click', () => {
+    tagsinput.addEventListener('click', (e) => {
+        // Prevent dropdown opening when clearing a selection pill.
+        if (e.target.closest('.pill-input-cancelbtn')) {
+            return;
+        }
         initializeTagsSearchContent(
             SELECTORS.tags.dropdownDiv,
             SELECTORS.tags.dropdown,
@@ -1550,6 +1627,7 @@ const manageCategorydropdownItems = (e, selected, selectable, dropdownDiv, dropd
         const categoryIndex = selectedCategories.findIndex(value => value.id == categoryId);
         selectableCategories.push(selectedCategories.splice(categoryIndex, 1)[0]);
     }
+    updateCategoryInputDisplay();
     renderSelectOptions();
     return Templates.renderForPromise(template, {
         categories: selectableCategories,
@@ -1584,6 +1662,7 @@ const manageTagsdropdownItems = (e, selected, selectable, dropdownDiv, dropdown,
         const tagsIndex = selectedTags.findIndex(value => value.id == tagsId);
         selectableTags.push(selectedTags.splice(tagsIndex, 1)[0]);
     }
+    updateTagsInputDisplay();
     renderSelectOptions();
     return Templates.renderForPromise(template, {
         tags: selectableTags,
@@ -1627,7 +1706,6 @@ const manageCustomfielddropdownCollapse = () => {
 const manageCustomfielddropdownItems = (e, selected, selectable, dropdownDiv, dropdown, promiseFunction, page) => {
     // Const template = 'block_eledia_coursesearch/nav-customfield-dropdown'.
     const customfieldValue = e.target.dataset.selectvalue;
-    const customfieldName = e.target.dataset.selectname;
     const customfieldId = e.target.dataset.customfieldid;
     if (e.target.classList.contains(selectable)) {
         const customfieldIndex = filteredCustomfields[customfieldId].findIndex(item => item.value == customfieldValue);
@@ -1642,14 +1720,12 @@ const manageCustomfielddropdownItems = (e, selected, selectable, dropdownDiv, dr
         const customfieldIndex = selectedCustomfields[customfieldId].findIndex(item => item.value == customfieldValue);
         const interchangedValue = selectedCustomfields[customfieldId].splice(customfieldIndex, 1)[0];
         // Customfields[customfieldId].push(interchangedValue);
-        const searchField = page.querySelector(".customsearch-" + customfieldId);
-        if (searchField.value === '' || customfieldName.toLowerCase().includes(searchField.value.trim().toLowerCase())) {
-            filteredCustomfields[customfieldId].push(interchangedValue);
-        }
+        filteredCustomfields[customfieldId].push(interchangedValue);
         filteredCustomfields[customfieldId].sort((a, b) => {
             return ('' + a.name).localeCompare(b.name);
         });
     }
+    updateCustomfieldInputDisplay(customfieldId);
     renderSelectOptions();
     return renderCustomfields(dropdownDiv,
         dropdown,
@@ -1789,6 +1865,15 @@ function deleteSelectOption(type, index, cindex) {
         default:
             throw new Error('Invalid type "' + type + '" for deleteSelectOption');
     }
+
+    // Update respective input type display.
+    if (type === 'category') {
+        updateCategoryInputDisplay();
+    } else if (type === 'tag') {
+        updateTagsInputDisplay();
+    } else if (type === 'customfield') {
+        updateCustomfieldInputDisplay(index);
+    }
     renderSelectOptions();
     // Fetch and render courses again.
     const page = document.querySelector(SELECTORS.region.selectBlock);
@@ -1808,5 +1893,20 @@ document.body.addEventListener('click', (e) => {
         const index = parseInt(cancelBtn.dataset.index);
         const cindex = parseInt(cancelBtn.dataset.cindex);
         deleteSelectOption(type, index, cindex);
+    }
+});
+
+/**
+ * Event listener for deleting selected option item pills.
+ */
+document.body.addEventListener('click', (e) => {
+    const pillBtn = e.target.closest('.pill-input-cancelbtn');
+    if (pillBtn) {
+        e.preventDefault();
+        deleteSelectOption(
+            pillBtn.dataset.type,
+            parseInt(pillBtn.dataset.index),
+            parseInt(pillBtn.dataset.cindex)
+        );
     }
 });

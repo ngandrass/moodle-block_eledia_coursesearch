@@ -58,6 +58,7 @@ if ($ADMIN->fulltree) {
     // Enable / Disable available layouts.
     $choices = [
         BLOCK_ELEDIACOURSESEARCH_OPTIONS_OFF => get_string('selectedoption_off', 'block_eledia_coursesearch'),
+        BLOCK_ELEDIACOURSESEARCH_OPTIONS_INLINE => get_string('selectedoption_inline', 'block_eledia_coursesearch'),
         BLOCK_ELEDIACOURSESEARCH_OPTIONS_TOP => get_string('selectedoption_top', 'block_eledia_coursesearch'),
         BLOCK_ELEDIACOURSESEARCH_OPTIONS_BOTTOM => get_string('selectedoption_bottom', 'block_eledia_coursesearch'),
     ];
@@ -65,7 +66,7 @@ if ($ADMIN->fulltree) {
         'block_eledia_coursesearch/options_position',
         get_string('selected_options_position', 'block_eledia_coursesearch'),
         get_string('selected_options_position_description', 'block_eledia_coursesearch'),
-        BLOCK_ELEDIACOURSESEARCH_OPTIONS_OFF,
+        BLOCK_ELEDIACOURSESEARCH_OPTIONS_INLINE,
         $choices
     ));
     unset($choices);

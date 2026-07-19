@@ -100,6 +100,7 @@ $string['searchtags'] = "Tags suchen";
 $string['selected_options_position'] = 'Position der ausgewählten Optionen';
 $string['selected_options_position_description'] = 'Die Position des Bereichs für die Kacheln der ausgewählten Optionen.';
 $string['selectedoption_bottom'] = 'Unterhalb des ausklappbaren Suchfeldbereichs';
+$string['selectedoption_inline'] = 'In den Filtereingabefeldern';
 $string['selectedoption_off'] = 'Aus';
 $string['selectedoption_top'] = 'Unterhalb des immer sichtbaren Suchfeldbereichs';
 $string['setting_locked_obsolete'] = 'Diese Einstellung ist veraltet, wird aber vom Code benötigt und kann nicht geändert werden.';

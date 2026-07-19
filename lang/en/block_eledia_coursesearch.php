@@ -100,6 +100,7 @@ $string['searchtags'] = "Search tags";
 $string['selected_options_position'] = 'Selected options items position';
 $string['selected_options_position_description'] = 'The position of the selected options item tiles section.';
 $string['selectedoption_bottom'] = 'Below expandable search field section';
+$string['selectedoption_inline'] = 'Inline within filter input fields';
 $string['selectedoption_off'] = 'Off';
 $string['selectedoption_top'] = 'Below alway visible search field section';
 $string['setting_locked_obsolete'] = 'This setting is obsolete but required by the code and cannot be changed.';
