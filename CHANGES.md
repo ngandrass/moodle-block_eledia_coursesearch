@@ -16,6 +16,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Replace custom translation system with Moodle's built-in multilang filter
 - Align course search bar placeholder with the input field label
 - Improve course freetext search bar and remove dependency on core component
+- Display cards grid layout by default, regardless of the clients device type since it is now responsive
 - Add Bootstrap 5 compatibility for newer Moodle releases
 - Fix course category filter dropdown and selectors for customfield dropdowns
 
