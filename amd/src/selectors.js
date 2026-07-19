@@ -68,6 +68,7 @@ export default {
         noItem: 'tags-no',
     },
     customfields: {
+        prevent: '.customprevent',
         clearIcon: '[data-action="clearcustomsearch"]',
         input: '[data-action="customsearch"]',
         searchfield: '.customsearch-',
