@@ -63,8 +63,8 @@ if ($ADMIN->fulltree) {
     // Note: This setting should not be changed as it breaks the plugin frontend.
     // Hidden from admin interface but accessible to code.
     $choices = [
-        BLOCK_ELEDIACOURSESEARCH_VIEW_CARD => get_string('list', 'block_eledia_coursesearch'),
-        BLOCK_ELEDIACOURSESEARCH_VIEW_SUMMARY => get_string('cards', 'block_eledia_coursesearch'),
+        BLOCK_ELEDIACOURSESEARCH_VIEW_CARD => get_string('cards', 'block_eledia_coursesearch'),
+        BLOCK_ELEDIACOURSESEARCH_VIEW_SUMMARY => get_string('list', 'block_eledia_coursesearch'),
     ];
     if (get_config('block_eledia_coursesearch', 'layouts') === false) {
         set_config('layouts', implode(',', array_keys($choices)), 'block_eledia_coursesearch');
