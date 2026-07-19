@@ -996,7 +996,7 @@ const searchFunctionalityCurry = () => {
 };
 
 /**
- * Initialize the categoy searching functionality so we can call it when required.
+ * Initialize the category searching functionality so we can call it when required.
  *
  * @return {function(Object): void}
  */
