@@ -7,6 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased] - YYYY-MM-DD
 
+- Add support for displaying course cards grid and list layouts using the Boost Union Moodle theme if available
 - Add "Inline within filter input fields" display mode for selected filter options, showing active selections as removable pills directly inside the input fields
 - Improve design of filter input fields and dropdowns and fix UX issues
 - Allow courses to be excluded from search results via a custom course field / checkbox (`block_eledia_coursesearch_visible`)

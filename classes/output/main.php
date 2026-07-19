@@ -436,7 +436,7 @@ class main implements renderable, templatable {
      *
      */
     public function export_for_template(renderer_base $output) {
-        global $CFG, $USER;
+        global $CFG, $PAGE;
 
         $nocoursesurl = $output->image_url('courses', 'block_eledia_coursesearch')->out();
 
@@ -498,6 +498,13 @@ class main implements renderable, templatable {
         }
         $optionsposition = get_config('block_eledia_coursesearch', 'options_position');
 
+        $courselistingstyle = get_config('block_eledia_coursesearch', 'courselistingstyle') ?: 'default';
+        if ($courselistingstyle === 'boostunion' && get_config('core', 'theme') !== 'boost_union') {
+            $courselistingstyle = 'default';
+        }
+        if ($courselistingstyle === 'boostunion') {
+            $PAGE->requires->js_call_amd('theme_boost_union/coursedetailsmodal', 'init');
+        }
         $defaultvariables = [
             'totalcoursecount' => count($userscourses),
             'nocoursesimg' => $nocoursesurl,
@@ -527,6 +534,7 @@ class main implements renderable, templatable {
             'customfieldvalues' => $customfieldvalues,
             'selectedcustomfield' => $selectedcustomfield,
             'showsortbyshortname' => $CFG->courselistshortnames,
+            'courselistingstyle' => $courselistingstyle,
         ];
         if ($optionsposition) {
             $defaultvariables['options_' . $optionsposition] = true;

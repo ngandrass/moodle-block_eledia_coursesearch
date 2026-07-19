@@ -35,6 +35,22 @@ if ($ADMIN->fulltree) {
         ''
     ));
 
+    // Course listing style (boost_union integration).
+    $courselistingstyleoptions = [
+        'default' => get_string('courselistingstyle_default', 'block_eledia_coursesearch'),
+    ];
+    if (get_config('core', 'theme') === 'boost_union') {
+        $courselistingstyleoptions['boostunion'] = get_string('courselistingstyle_boostunion', 'block_eledia_coursesearch');
+    }
+    $settings->add(new admin_setting_configselect(
+        'block_eledia_coursesearch/courselistingstyle',
+        get_string('courselistingstyle', 'block_eledia_coursesearch'),
+        get_string('courselistingstyle_desc', 'block_eledia_coursesearch'),
+        'default',
+        $courselistingstyleoptions
+    ));
+    unset($courselistingstyleoptions);
+
     // Display Course Categories on Dashboard course items (cards, lists, summary items).
     $settings->add(new admin_setting_configcheckbox(
         'block_eledia_coursesearch/displaycategories',

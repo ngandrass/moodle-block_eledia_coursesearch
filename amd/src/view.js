@@ -40,7 +40,9 @@ import {setUserPreference} from 'core_user/repository';
 
 const TEMPLATES = {
     COURSES_CARDS: 'block_eledia_coursesearch/view-cards',
+    COURSES_CARDS_BOOSTUNION: 'block_eledia_coursesearch/view-cards-boostunion',
     COURSES_LIST: 'block_eledia_coursesearch/view-list',
+    COURSES_LIST_BOOSTUNION: 'block_eledia_coursesearch/view-list-boostunion',
     COURSES_SUMMARY: 'block_eledia_coursesearch/view-summary',
     NOCOURSES: 'core_course/no-courses'
 };
@@ -66,6 +68,8 @@ let lastPage = 0;
 let lastLimit = 0;
 
 let namespace = null;
+
+let courseListingStyle = 'default';
 
 let selectedCategories = [];
 let selectableCategories = [];
@@ -268,6 +272,10 @@ const getParams = (limit = 0) => {
             {
                 key: 'selectedTags',
                 tags: selectedTags,
+            },
+            {
+                key: 'style',
+                value: courseListingStyle,
             },
         ],
         addsubcategories: true,
@@ -705,14 +713,15 @@ const noCoursesRender = root => {
 const renderCourses = (root, coursesData) => {
 
     const filters = getFilterValues(root);
+    const useBoostUnion = courseListingStyle === 'boostunion';
 
     let currentTemplate = '';
     if (filters.display === 'card') {
-        currentTemplate = TEMPLATES.COURSES_CARDS;
+        currentTemplate = useBoostUnion ? TEMPLATES.COURSES_CARDS_BOOSTUNION : TEMPLATES.COURSES_CARDS;
     } else if (filters.display === 'list') {
-        currentTemplate = TEMPLATES.COURSES_LIST;
+        currentTemplate = useBoostUnion ? TEMPLATES.COURSES_LIST_BOOSTUNION : TEMPLATES.COURSES_LIST;
     } else {
-        currentTemplate = TEMPLATES.COURSES_SUMMARY;
+        currentTemplate = useBoostUnion ? TEMPLATES.COURSES_LIST_BOOSTUNION : TEMPLATES.COURSES_SUMMARY;
     }
 
     if (!coursesData) {
@@ -722,15 +731,19 @@ const renderCourses = (root, coursesData) => {
         if (Array.isArray(coursesData.courses) === false) {
             coursesData.courses = Object.values(coursesData.courses);
         }
-        // Whether the course category should be displayed in the course item.
         coursesData.courses = coursesData.courses.map(course => {
-            course.showcoursecategory = filters.displaycategories === 'on';
+            if (useBoostUnion && course.boostunion) {
+                // Flatten boost_union fields to top level so boost_union templates can access them directly.
+                Object.assign(course, course.boostunion);
+                delete course.boostunion;
+            }
+            if (!useBoostUnion) {
+                course.showcoursecategory = filters.displaycategories === 'on';
+            }
             return course;
         });
         if (coursesData.courses.length) {
-            return Templates.render(currentTemplate, {
-                courses: coursesData.courses,
-            });
+            return Templates.render(currentTemplate, {courses: coursesData.courses});
         } else {
             return noCoursesRender(root);
         }
@@ -1745,6 +1758,9 @@ export const init = root => {
     lastPage = 0;
     courseOffset = 0;
 
+    const courseRegion = root.find(SELECTORS.courseView.region);
+    courseListingStyle = courseRegion.attr('data-courselistingstyle') || 'default';
+
     if (!root.attr('data-init')) {
         const page = document.querySelector(SELECTORS.region.selectBlock);
         registerEventListeners(root, page);
@@ -1769,7 +1785,8 @@ export const reset = root => {
         const filters = getFilterValues(root);
         // If the display mode is changed to 'summary' but the summary display has not been loaded yet,
         // we need to re-fetch the courses to include the course summary text.
-        if (filters.display === 'summary' && !summaryDisplayLoaded) {
+        // In boost_union mode all views share the same data so no re-fetch is needed.
+        if (filters.display === 'summary' && !summaryDisplayLoaded && courseListingStyle !== 'boostunion') {
             const page = document.querySelector(SELECTORS.region.selectBlock);
             const input = page.querySelector(SELECTORS.region.searchInput);
             if (input.value !== '') {

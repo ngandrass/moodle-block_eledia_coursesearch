@@ -83,3 +83,13 @@
     position: absolute;
     right: 0.5rem;
 }
+
+/* Bootstrap card view */
+.block_eledia_coursesearch .theme_boost_union-courselisting-card .card {
+    height: 100%;
+}
+
+.block_eledia_coursesearch .theme_boost_union-courselisting-card .card-footer .btn {
+    padding: .25rem .5rem;
+    font-size: .875rem;
+}
