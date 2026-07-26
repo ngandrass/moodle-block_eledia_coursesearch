@@ -450,7 +450,7 @@ class externallib extends external_api {
         ";
         $courses = $DB->get_records_sql($sql, $inparams);
         $style = $searchdata['style'] ?? 'default';
-        return self::get_courses_rendered($courses, 0, $style);
+        return self::get_courses_rendered($courses, $searchdata['offset'], $style);
     }
 
     /**
@@ -713,10 +713,8 @@ class externallib extends external_api {
             AND cd.value != :visibility_cf_value
         ) ";
 
-        $idsunfiltered = $DB->get_records_sql($sql, $allparams, $offset, $limit);
-        $idsunfiltered = array_keys($idsunfiltered);
-
         if ($contextids) {
+            $idsunfiltered = array_keys($DB->get_records_sql($sql, $allparams, $offset, $limit));
             [$insql, $inparams] = $DB->get_in_or_equal($userscourses);
             $contextids = array_keys($DB->get_records_select(
                 'context',
@@ -725,11 +723,19 @@ class externallib extends external_api {
                 'id',
                 'id'
             ));
-            $idsfiltered = array_intersect($idsunfiltered, $contextids);
-        } else {
-            $idsfiltered = array_intersect($idsunfiltered, $userscourses);
+            return array_intersect($idsunfiltered, $contextids);
         }
-        return $idsfiltered;
+
+        // Incorporate $userscourses filter into SQL so DB-level pagination
+        // operates on the already-visible set, avoiding short pages from post-query intersection.
+        if (empty($userscourses)) {
+            return [];
+        }
+        [$usersql, $userparams] = $DB->get_in_or_equal($userscourses, SQL_PARAMS_NAMED, 'uc');
+        $allparams = array_merge($allparams, $userparams);
+        $sql .= " AND c.id $usersql ";
+
+        return array_keys($DB->get_records_sql($sql, $allparams, $offset, $limit));
     }
 
     /**

@@ -144,25 +144,13 @@ const DEFAULT_PAGED_CONTENT_CONFIG = {
  *
  * @param {object} filters The filters for this view.
  * @param {int} limit The number of courses to show.
- * @param {object} searchParams The params.
  * @return {promise} Resolved with an array of courses.
  */
-const getMyCourses = (filters, limit, searchParams) => {
-    const params = {
-        offset: courseOffset,
-        limit: limit,
-        classification: filters.grouping,
-        sort: filters.sort,
-        customfieldname: filters.customfieldname,
-        customfieldvalue: filters.customfieldvalue,
-    };
+const getMyCourses = (filters, limit) => {
     if (filters.display === 'summary') {
-        params.requiredfields = Repository.SUMMARY_REQUIRED_FIELDS;
         summaryDisplayLoaded = true;
-    } else {
-        params.requiredfields = Repository.CARDLIST_REQUIRED_FIELDS;
     }
-    return Repository.getEnrolledCoursesByTimeline(searchParams);
+    return Repository.getEnrolledCoursesByTimeline(getParams(limit));
 };
 
 /**
@@ -170,27 +158,15 @@ const getMyCourses = (filters, limit, searchParams) => {
  *
  * @param {object} filters The filters for this view.
  * @param {int} limit The number of courses to show.
- * @param {string} searchValue What does the user want to search within their courses.
  * @return {promise} Resolved with an array of courses.
  */
-const getSearchMyCourses = (filters, limit, searchValue) => {
-    const params = {
-        offset: courseOffset,
-        limit: limit,
-        classification: 'search',
-        sort: filters.sort,
-        customfieldname: filters.customfieldname,
-        customfieldvalue: filters.customfieldvalue,
-        searchvalue: searchValue,
-    };
+const getSearchMyCourses = (filters, limit) => {
     if (filters.display === 'summary') {
-        params.requiredfields = Repository.SUMMARY_REQUIRED_FIELDS;
         summaryDisplayLoaded = true;
     } else {
-        params.requiredfields = Repository.CARDLIST_REQUIRED_FIELDS;
         summaryDisplayLoaded = false;
     }
-    return Repository.getEnrolledCoursesByTimeline(searchValue);
+    return Repository.getEnrolledCoursesByTimeline(getParams(limit));
 };
 
 /**
@@ -960,11 +936,10 @@ const resetGlobals = () => {
  */
 const standardFunctionalityCurry = () => {
     resetGlobals();
-    return (filters, currentPage, pageData, actions, root, promises, limit, searchParams) => {
+    return (filters, currentPage, pageData, actions, root, promises, limit) => {
         const pagePromise = getMyCourses(
             filters,
-            limit,
-            searchParams
+            limit
         ).then(coursesData => {
             pageBuilder(coursesData, currentPage, pageData, actions);
             return renderCourses(root, loadedPages[currentPage]);
@@ -981,11 +956,10 @@ const standardFunctionalityCurry = () => {
  */
 const searchFunctionalityCurry = () => {
     resetGlobals();
-    return (filters, currentPage, pageData, actions, root, promises, limit, inputValue) => {
+    return (filters, currentPage, pageData, actions, root, promises, limit) => {
         const searchingPromise = getSearchMyCourses(
             filters,
-            limit,
-            inputValue
+            limit
         ).then(coursesData => {
             const searchTerm = document.querySelector('.block-eledia_coursesearch [data-action="search"]').value;
             if (searchTerm.trim() !== '') {
