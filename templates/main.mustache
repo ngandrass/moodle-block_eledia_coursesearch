@@ -33,10 +33,13 @@
             </div>
 
             {{> block_eledia_coursesearch/nav-grouping-selector }}
-            {{> block_eledia_coursesearch/nav-customfield-selector }}
+
+            <div class="row g-2 m-0 px-0 w-100">
+                {{> block_eledia_coursesearch/nav-customfield-selector }}
+            </div>
 
             {{! Expansion content }}
-            <div class="collapse customfields-collapse row g-2 mt-0 px-0 w-100" id="filtercollapse">
+            <div class="collapse customfields-collapse row g-2 m-0 px-0 w-100" id="filtercollapse">
                 {{> block_eledia_coursesearch/nav-customfield-selector-collapse }}
                 {{> block_eledia_coursesearch/nav-category-selector }}
                 {{> block_eledia_coursesearch/nav-tags-selector }}
@@ -50,7 +53,7 @@
             {{/options_top}}
 
             {{! Expansion trigger }}
-            <div class="search-extension col-12 mb-3 d-flex">
+            <div class="search-extension col-12 mb-3 mt-2 d-flex">
                 <a
                     class="btn btn-primary me-3"
                     data-bs-toggle="collapse"
