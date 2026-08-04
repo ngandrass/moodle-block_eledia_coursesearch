@@ -28,6 +28,7 @@ defined('MOODLE_INTERNAL') || die();
 use block_eledia_coursesearch\externallib;
 use core_competency\url;
 use core_contentbank\output\customfields;
+use core_requirejs;
 use renderable;
 use renderer_base;
 use templatable;
@@ -503,7 +504,13 @@ class main implements renderable, templatable {
             $courselistingstyle = 'default';
         }
         if ($courselistingstyle === 'boostunion') {
-            $PAGE->requires->js_call_amd('theme_boost_union/coursedetailsmodal', 'init');
+            if (!empty(core_requirejs::find_one_amd_module('theme_boost_union', 'coursedetailsmodal.js'))) {
+                // For theme_boost_union >= 2025100605.
+                $PAGE->requires->js_call_amd('theme_boost_union/coursedetailsmodal', 'init');
+            } else {
+                // For theme_boost_union < 2025100605.
+                $PAGE->requires->js_call_amd('theme_boost_union/courselistingdetailsmodal', 'init');
+            }
         }
         $defaultvariables = [
             'totalcoursecount' => count($userscourses),
