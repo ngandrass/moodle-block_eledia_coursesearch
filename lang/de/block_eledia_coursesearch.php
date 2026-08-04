@@ -94,6 +94,7 @@ $string['privacy:metadata:overviewviewpreference'] = 'Anzeigepräferenz für den
 $string['privacy:request:preference:set'] = 'Der Wert der Einstellung \'{$a->name}\' war \'{$a->value}\'';
 $string['removeallitems'] = 'Alle entfernen';
 $string['removefromfavourites'] = 'Stern für diesen Kurs entfernen';
+$string['resetsearch'] = 'Suche zurücksetzen';
 $string['searchcategories'] = "Kategorien suchen";
 $string['searchcourses'] = "Kurse suchen";
 $string['searchtags'] = "Tags suchen";

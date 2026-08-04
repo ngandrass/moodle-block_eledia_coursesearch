@@ -1256,6 +1256,14 @@ const registerEventListeners = (root, page) => {
     const customfieldSelectable = SELECTORS.customfields.selectableItem;
     const customfieldSelected = SELECTORS.customfields.selectedItem;
     const groupingFilter = page.querySelectorAll(SELECTORS.FILTER_GROUPING);
+    const resetSearchLink = page.querySelector(SELECTORS.ACTION_RESET_SEARCH);
+
+    if (resetSearchLink) {
+        resetSearchLink.addEventListener('click', e => {
+            e.preventDefault();
+            resetSearch(root);
+        });
+    }
 
     clearIcon.addEventListener('click', () => {
         input.value = '';
@@ -1536,6 +1544,62 @@ export const clearCustomfieldSearch = (clearCustomfieldIcons) => {
  */
 export const clearCustomfieldSingleIconSearch = icon => {
     icon.classList.add('d-none');
+};
+
+/**
+ * Reset the freetext search and all filters (categories, tags, custom fields, grouping) back
+ * to their default state and refetch the course list.
+ *
+ * @param {Object} root The eledia_coursesearch block container element.
+ */
+const resetSearch = root => {
+    const page = document.querySelector(SELECTORS.region.selectBlock);
+
+    // Freetext search.
+    const input = page.querySelector(SELECTORS.region.searchInput);
+    const clearIcon = page.querySelector(SELECTORS.region.clearIcon);
+    input.value = '';
+    searchTerm = '';
+    clearIcon.classList.add('d-none');
+
+    // Categories.
+    catSearchTerm = '';
+    selectedCategories = [];
+    const clearCatIcon = page.querySelector(SELECTORS.cat.clearIcon);
+    clearCatIcon.classList.add('d-none');
+    updateCategoryInputDisplay();
+
+    // Tags.
+    tagsSearchTerm = '';
+    selectedTags = [];
+    const clearTagsIcon = page.querySelector(SELECTORS.tags.clearIcon);
+    clearTagsIcon.classList.add('d-none');
+    updateTagsInputDisplay();
+
+    // Custom course fields (covers both the visible row and the collapsed section).
+    page.querySelectorAll(SELECTORS.customfields.input).forEach(fieldInput => {
+        const customfieldId = fieldInput.dataset.customfieldid;
+        if (selectedCustomfields[customfieldId]) {
+            selectedCustomfields[customfieldId] = [];
+        }
+        updateCustomfieldInputDisplay(customfieldId);
+    });
+    page.querySelectorAll(SELECTORS.customfields.clearIcon).forEach(icon => {
+        icon.classList.add('d-none');
+    });
+
+    // Refresh the "selected option" pill row so it reflects the now-empty selections.
+    renderSelectOptions();
+
+    // Grouping: reuse the "All" menu item's own click handlers (registered above and in
+    // view_nav.js) so the dropdown label, aria-current state, data-grouping attribute and
+    // courseInProgress all stay in sync, and the final course refetch happens exactly once.
+    const groupingAllItem = page.querySelector(SELECTORS.FILTER_GROUPING + '[data-value="all"]');
+    if (groupingAllItem) {
+        groupingAllItem.click();
+    } else {
+        init(root);
+    }
 };
 
 /**
