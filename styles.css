@@ -39,6 +39,10 @@
     margin-bottom: .5rem;
 }
 
+.dropdown-toggle::after {
+    color: var(--bs-body-color);
+}
+
 .block_eledia-coursesearch div[data-region="paging-control-limit-container"] {
     display: none;
 }
@@ -68,12 +72,14 @@
 
 /* Override btn-outline-secondary background/color change on hover and active for grouping dropdown */
 .block_eledia_coursesearch button#groupingdropdown {
+    --bs-btn-border-color: var(--bs-gray-500);
     --bs-btn-hover-bg: transparent;
     --bs-btn-hover-color: var(--bs-btn-color);
-    --bs-btn-hover-border-color: var(--bs-btn-border-color);
+    --bs-btn-hover-border-color: var(--bs-gray-500);
     --bs-btn-active-bg: transparent;
     --bs-btn-active-color: var(--bs-btn-color);
-    --bs-btn-active-border-color: var(--bs-btn-border-color);
+    --bs-btn-active-border-color: var(--bs-gray-500);
+    border-color: var(--bs-gray-500) !important;
     transition: box-shadow .15s ease-in-out;
 }
 
