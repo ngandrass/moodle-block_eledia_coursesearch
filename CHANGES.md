@@ -22,6 +22,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Add Bootstrap 5 compatibility for newer Moodle releases
 - Fix course category filter dropdown and selectors for customfield dropdowns
 - Unify spacing between different filter input fields
+- Align German translations for course timeframe with Moodle core translations
 
 
 ## [1.0] - 2026-01-29
