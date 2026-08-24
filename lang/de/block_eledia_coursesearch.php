@@ -67,6 +67,7 @@ $string['customfiltergrouping'] = 'Zu verwendendes Feld';
 $string['customfiltergrouping_nofields'] = 'Diese Option erfordert ein benutzerdefiniertes Kursfeld, das für alle sichtbar ist.';
 $string['displaycategories'] = 'Kategorien anzeigen';
 $string['displaycategories_help'] = 'Zeigt die Kurskategorie auf Dashboard-Elementen wie Kacheln, Listen- und Zusammenfassungselementen an.';
+$string['eledia_coursesearch:addinstance'] = 'Neuen Kurssuche-Block hinzufügen';
 $string['eledia_coursesearch:myaddinstance'] = 'Neuen Kursübersichtsblock zum Dashboard hinzufügen';
 $string['expandsearch'] = 'Erweiterte Suche';
 $string['expandsummary'] = 'Zusammenfassung ausklappen';

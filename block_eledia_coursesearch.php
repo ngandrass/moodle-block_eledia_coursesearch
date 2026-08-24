@@ -70,7 +70,10 @@ class block_eledia_coursesearch extends block_base {
      * @return array
      */
     public function applicable_formats() {
-        return ['my' => true];
+        return [
+            'my' => true,
+            'site-index' => true,
+        ];
     }
 
     /**

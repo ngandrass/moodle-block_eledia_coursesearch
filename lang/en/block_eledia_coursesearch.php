@@ -67,6 +67,7 @@ $string['customfiltergrouping'] = 'Field to use';
 $string['customfiltergrouping_nofields'] = 'This option requires a course custom field to be set up and visible to everyone.';
 $string['displaycategories'] = 'Display categories';
 $string['displaycategories_help'] = 'Display the course category on dashboard course items including cards, list items and summary items.';
+$string['eledia_coursesearch:addinstance'] = 'Add a new course search block';
 $string['eledia_coursesearch:myaddinstance'] = 'Add a new course overview block to Dashboard';
 $string['expandsearch'] = 'Expand search';
 $string['expandsummary'] = 'expand summary';
